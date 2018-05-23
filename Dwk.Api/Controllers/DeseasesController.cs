@@ -13,18 +13,22 @@ namespace Dwk.Api.Controllers
     {
         // GET: api/Deseases
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> GetAll(int page)
         {
-            return new string[] { "HIV", "Diabetes" };
+            return new string[] { page.ToString(),"hh", "HIV", "Diabetes" };
         }
-
+		[HttpGet("search")]
+		// GET: api/Deseases/search
+		public IEnumerable<string> Search(string content, int page)
+		{
+			return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
+		}
         // GET: api/Deseases/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
             return "AIDS";
         }
-        
         // POST: api/Deseases
         [HttpPost]
         public void Post([FromBody]string value)
@@ -35,6 +39,8 @@ namespace Dwk.Api.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+
+			
         }
         
         // DELETE: api/ApiWithActions/5
