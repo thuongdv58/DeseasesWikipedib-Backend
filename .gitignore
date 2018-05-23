@@ -1,0 +1,20 @@
+*.lock.json
+# LightSwitch generated files
+GeneratedArtifacts/
+_Pvt_Extensions/
+ModelManifest.xml
+.vs/
+.git/
+*.log
+*.xproj.user
+*.user
+bin/
+obj/
+*.userprefs
+.DS_Store
+tmp
+temp
+.vscode
+tempkey.rsa
+data
+*\-nlog.txt
