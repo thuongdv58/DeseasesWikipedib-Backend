@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Dwk.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dwk.Api
 {
@@ -24,6 +26,8 @@ namespace Dwk.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddEntityFrameworkNpgsql().AddDbContext<DwkApiContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("DwkApiConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

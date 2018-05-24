@@ -49,10 +49,28 @@ namespace Dwk.Api.Controllers
 			
         }
         
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/deseases/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public string Delete(int id)
         {
+			return "shit";
         }
+		// GET: 
+		[HttpGet("attribute-recommendation")]
+		public string[] AttributeRecommendation()
+		{
+			string[] AttributeNameList = new string[] {
+				"Biểu hiện lâm sàng",
+				"Cách điều trị",
+				"Triệu chứng",
+				"Chẩn đoán",
+				"Điều trị",
+				"Tổng quan",
+				"Nguyên nhân",
+				"Phòng ngừa",
+				"Thuốc"
+			};
+			return AttributeNameList;
+		}
     }
 }
