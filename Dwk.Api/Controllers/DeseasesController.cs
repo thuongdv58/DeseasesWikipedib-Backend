@@ -11,32 +11,38 @@ namespace Dwk.Api.Controllers
     [Route("api/Deseases")]
     public class DeseasesController : Controller
     {
-        // GET: api/Deseases
+        // GET: api/deseases
         [HttpGet]
         public IEnumerable<string> GetAll(int page)
         {
             return new string[] { page.ToString(),"hh", "HIV", "Diabetes" };
         }
 		[HttpGet("search")]
-		// GET: api/Deseases/search
+		// GET: api/deseases/search
 		public IEnumerable<string> Search(string content, int page)
 		{
 			return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
 		}
-        // GET: api/Deseases/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+		[HttpGet("search-recommendations")]
+		// GET: api/deseases/search-recommendations
+		public IEnumerable<string> SearchRecommendation(string content, int page)
+		{
+			return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
+		}
+		// GET: api/deseases/5
+		[HttpGet("{id}", Name = "GetDetail")]
+        public string GetDetail(int id)
         {
             return "AIDS";
         }
-        // POST: api/Deseases
-        [HttpPost]
+        // POST: api/deseases/add-desease
+        [HttpPost("add-desease")]
         public void Post([FromBody]string value)
         {
         }
         
-        // PUT: api/Deseases/5
-        [HttpPut("{id}")]
+        // PUT: api/deseases/update-desease/5
+        [HttpPut("update-desease/{id}")]
         public void Put(int id, [FromBody]string value)
         {
 
