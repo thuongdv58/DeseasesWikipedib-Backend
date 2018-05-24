@@ -15,22 +15,22 @@ namespace Dwk.Api.Controllers
         [HttpGet]
         public IEnumerable<string> GetAll(int page)
         {
-            return new string[] { page.ToString(),"hh", "HIV", "Diabetes" };
+            return new string[] { page.ToString(), "hh", "HIV", "Diabetes" };
         }
-		[HttpGet("search")]
-		// GET: api/deseases/search
-		public IEnumerable<string> Search(string content, int page)
-		{
-			return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
-		}
-		[HttpGet("search-recommendations")]
-		// GET: api/deseases/search-recommendations
-		public IEnumerable<string> SearchRecommendation(string content, int page)
-		{
-			return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
-		}
-		// GET: api/deseases/5
-		[HttpGet("{id}", Name = "GetDetail")]
+        [HttpGet("search")]
+        // GET: api/deseases/search
+        public IEnumerable<string> Search(string content, int page)
+        {
+            return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
+        }
+        [HttpGet("search-recommendations")]
+        // GET: api/deseases/search-recommendations
+        public IEnumerable<string> SearchRecommendation(string content, int page)
+        {
+            return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
+        }
+        // GET: api/deseases/5
+        [HttpGet("{id}", Name = "GetDetail")]
         public string GetDetail(int id)
         {
             return "AIDS";
@@ -40,37 +40,37 @@ namespace Dwk.Api.Controllers
         public void Post([FromBody]string value)
         {
         }
-        
+
         // PUT: api/deseases/update-desease/5
         [HttpPut("update-desease/{id}")]
         public void Put(int id, [FromBody]string value)
         {
 
-			
+
         }
-        
+
         // DELETE: api/deseases/5
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-			return "shit";
+            return "shit";
         }
-		// GET: 
-		[HttpGet("attribute-recommendation")]
-		public string[] AttributeRecommendation()
-		{
-			string[] AttributeNameList = new string[] {
-				"Biểu hiện lâm sàng",
-				"Cách điều trị",
-				"Triệu chứng",
-				"Chẩn đoán",
-				"Điều trị",
-				"Tổng quan",
-				"Nguyên nhân",
-				"Phòng ngừa",
-				"Thuốc"
-			};
-			return AttributeNameList;
-		}
+        // GET: 
+        [HttpGet("attribute-recommendation")]
+        public string[] AttributeRecommendation()
+        {
+            string[] AttributeNameList = new string[] {
+                "Biểu hiện lâm sàng",
+                "Cách điều trị",
+                "Triệu chứng",
+                "Chẩn đoán",
+                "Điều trị",
+                "Tổng quan",
+                "Nguyên nhân",
+                "Phòng ngừa",
+                "Thuốc"
+            };
+            return AttributeNameList;
+        }
     }
 }
