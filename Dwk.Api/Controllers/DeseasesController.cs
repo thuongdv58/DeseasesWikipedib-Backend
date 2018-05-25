@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Dwk.Api.Models;
 
 namespace Dwk.Api.Controllers
 {
@@ -11,53 +13,128 @@ namespace Dwk.Api.Controllers
     [Route("api/Deseases")]
     public class DeseasesController : Controller
     {
-        // GET: api/deseases
-        [HttpGet]
-        public IEnumerable<string> GetAll(int page)
-        {
-            return new string[] { page.ToString(), "hh", "HIV", "Diabetes" };
-        }
-        [HttpGet("search")]
+
+		private readonly DwkApiContext _context;
+
+		public DeseasesController(DwkApiContext context)
+		{
+			_context = context;
+		}
+		// GET: api/deseases
+		//[HttpGet]
+		//public IActionResult GetAll(int page)
+		//{
+		//   return Ok(new string[] { page.ToString(), "hh", "HIV", "Diabetes" });
+		//}
+		[HttpGet]
+		public IEnumerable<Desease> GetDeseases(int page)
+		{
+			return _context.Deseases;
+		}
+
+		[HttpGet("search")]
         // GET: api/deseases/search
-        public IEnumerable<string> Search(string content, int page)
+        public IActionResult Search(string content, int page)
         {
-            return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
+            return Ok(new string[] { page.ToString(), content, "what problem", "Yellow shit" });
         }
+
         [HttpGet("search-recommendations")]
         // GET: api/deseases/search-recommendations
-        public IEnumerable<string> SearchRecommendation(string content, int page)
+        public IActionResult SearchRecommendation(string content, int page)
         {
-            return new string[] { page.ToString(), content, "what problem", "Yellow shit" };
-        }
-        // GET: api/deseases/5
-        [HttpGet("{id}", Name = "GetDetail")]
-        public string GetDetail(int id)
-        {
-            return "AIDS";
-        }
-        // POST: api/deseases/add-desease
-        [HttpPost("add-desease")]
-        public void Post([FromBody]string value)
-        {
+            return Ok(new string[] { page.ToString(), content, "what problem", "Yellow shit" });
         }
 
-        // PUT: api/deseases/update-desease/5
-        [HttpPut("update-desease/{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetDesease([FromRoute] int id)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
+			var desease = await _context.Deseases.SingleOrDefaultAsync(m => m.Id == id);
 
-        }
+			if (desease == null)
+			{
+				return NotFound();
+			}
 
-        // DELETE: api/deseases/5
-        [HttpDelete("{id}")]
-        public string Delete(int id)
-        {
-            return "shit";
-        }
-        // GET: 
-        [HttpGet("attribute-recommendation")]
-        public string[] AttributeRecommendation()
+			return Ok(desease);
+		}
+
+		// POST: api/deseases/add-desease
+		[HttpPost("add-desease")]
+		public async Task<IActionResult> PostDesease([FromBody] Desease desease)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			_context.Deseases.Add(desease);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetDesease", new { id = desease.Id }, desease);
+		}
+
+		// PUT: api/deseases/update-desease/5
+		[HttpPut("update-desease/{id}")]
+		public async Task<IActionResult> PutDesease([FromRoute] int id, [FromBody] Desease desease)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			if (id != desease.Id)
+			{
+				return BadRequest();
+			}
+
+			_context.Entry(desease).State = EntityState.Modified;
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!DeseaseExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+			return NoContent();
+		}
+		// DELETE: api/deseases/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteDesease([FromRoute] int id)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			var desease = await _context.Deseases.SingleOrDefaultAsync(m => m.Id == id);
+			if (desease == null)
+			{
+				return NotFound();
+			}
+
+			_context.Deseases.Remove(desease);
+			await _context.SaveChangesAsync();
+
+			return Ok(desease);
+		}
+		// GET: 
+		[HttpGet("attribute-recommendation")]
+        public IEnumerable<string> AttributeRecommendation()
         {
             string[] AttributeNameList = new string[] {
                 "Biểu hiện lâm sàng",
@@ -72,5 +149,9 @@ namespace Dwk.Api.Controllers
             };
             return AttributeNameList;
         }
-    }
+		private bool DeseaseExists(int id)
+		{
+			return _context.Deseases.Any(e => e.Id == id);
+		}
+	}
 }
