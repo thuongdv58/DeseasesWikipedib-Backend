@@ -20,12 +20,8 @@ namespace Dwk.Api.Controllers
 		{
 			_context = context;
 		}
+
 		// GET: api/deseases
-		//[HttpGet]
-		//public IActionResult GetAll(int page)
-		//{
-		//   return Ok(new string[] { page.ToString(), "hh", "HIV", "Diabetes" });
-		//}
 		[HttpGet]
 		public IEnumerable<Desease> GetDeseases(int page)
 		{
