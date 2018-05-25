@@ -25,16 +25,16 @@ namespace Dwk.Api.Controllers
 
 		// GET: api/deseases
 		[HttpGet]
-		public IEnumerable<DeseaseListData> GetDeseases(int page)
+		public IEnumerable<DeseaseListData> GetDeseases(int page, int pageSize)
 		{
-			return _context.Deseases.Select(q=> new DeseaseListData(q.Id, q.name, q.@abstract));
+			return _context.Deseases.Skip(page * pageSize).Take(pageSize).Select(q=> new DeseaseListData(q.Id, q.name, q.@abstract));
 		}
 
 		[HttpGet("search")]
         // GET: api/deseases/search
-        public IEnumerable<DeseaseListData> Search(string content, int page)
+        public IEnumerable<DeseaseListData> Search(string content, int page, int pageSize)
         {
-			return _context.Deseases.Where(q => (q.name.Contains(content)||q.@abstract.Contains(content))).Select(q => new DeseaseListData(q.Id, q.name, q.@abstract));
+			return _context.Deseases.Where(q => (q.name.Contains(content)||q.@abstract.Contains(content))).Skip(page* pageSize).Take(pageSize).Select(q => new DeseaseListData(q.Id, q.name, q.@abstract));
 		}
 
         [HttpGet("search-recommendations")]
