@@ -11,9 +11,10 @@ using System;
 namespace Dwk.Api.Migrations
 {
     [DbContext(typeof(DwkApiContext))]
-    partial class DwkApiContextModelSnapshot : ModelSnapshot
+    [Migration("20180525030148_newMigration")]
+    partial class newMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -11,14 +11,33 @@ using System;
 namespace Dwk.Api.Migrations
 {
     [DbContext(typeof(DwkApiContext))]
-    partial class DwkApiContextModelSnapshot : ModelSnapshot
+    [Migration("20180525020232_secondMigration")]
+    partial class secondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
+
+            modelBuilder.Entity("Dwk.Api.Models.Attribute", b =>
+                {
+                    b.Property<string>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("DeseaseId");
+
+                    b.Property<string>("content");
+
+                    b.Property<string>("name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DeseaseId");
+
+                    b.ToTable("Attribute");
+                });
 
             modelBuilder.Entity("Dwk.Api.Models.Desease", b =>
                 {
@@ -26,8 +45,6 @@ namespace Dwk.Api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("abstract");
-
-                    b.Property<string>("attributes");
 
                     b.Property<string>("name");
 
@@ -48,6 +65,13 @@ namespace Dwk.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Dwk.Api.Models.Attribute", b =>
+                {
+                    b.HasOne("Dwk.Api.Models.Desease")
+                        .WithMany("attributes")
+                        .HasForeignKey("DeseaseId");
                 });
 #pragma warning restore 612, 618
         }

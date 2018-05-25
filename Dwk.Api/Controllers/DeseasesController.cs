@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Dwk.Api.Models;
+using System.Collections;
+using System.Diagnostics;
 
 namespace Dwk.Api.Controllers
 {
@@ -23,25 +25,25 @@ namespace Dwk.Api.Controllers
 
 		// GET: api/deseases
 		[HttpGet]
-		public IEnumerable<Desease> GetDeseases(int page)
+		public IEnumerable<DeseaseListData> GetDeseases(int page)
 		{
-			return _context.Deseases;
+			return _context.Deseases.Select(q=> new DeseaseListData(q.Id, q.name, q.@abstract));
 		}
 
 		[HttpGet("search")]
         // GET: api/deseases/search
-        public IActionResult Search(string content, int page)
+        public IEnumerable<DeseaseListData> Search(string content, int page)
         {
-            return Ok(new string[] { page.ToString(), content, "what problem", "Yellow shit" });
-        }
+			return _context.Deseases.Where(q => (q.name.Contains(content)||q.@abstract.Contains(content))).Select(q => new DeseaseListData(q.Id, q.name, q.@abstract));
+		}
 
         [HttpGet("search-recommendations")]
         // GET: api/deseases/search-recommendations
-        public IActionResult SearchRecommendation(string content, int page)
+        public IEnumerable<RecommendData> SearchRecommendation(string content)
         {
-            return Ok(new string[] { page.ToString(), content, "what problem", "Yellow shit" });
+			return _context.Deseases.Where(q => q.name.Contains(content)).Select(q=> new RecommendData(q.Id, q.name));
         }
-
+		// GET: api/deseases/5
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetDesease([FromRoute] int id)
 		{
@@ -68,6 +70,18 @@ namespace Dwk.Api.Controllers
 			{
 				return BadRequest(ModelState);
 			}
+			/*
+			List<Models.Attribute> AttributeField = new List<Models.Attribute>();
+			var attributeList = ((IEnumerable)desease.attributes).GetEnumerator();
+			while(attributeList.MoveNext())
+			{
+				var current = attributeList.Current;
+				AttributeField.Add(new Models.Attribute { name= current.ToString(), content= current.ToString() });
+			}
+			desease.attributes = ((IEnumerable)attributeList).Cast<Attribute>().ToList();
+			desease.attributes = AttributeField.ToArray();
+			return Ok(desease.attributes);
+			*/
 
 			_context.Deseases.Add(desease);
 			await _context.SaveChangesAsync();
@@ -148,6 +162,30 @@ namespace Dwk.Api.Controllers
 		private bool DeseaseExists(int id)
 		{
 			return _context.Deseases.Any(e => e.Id == id);
+		}
+	}
+
+	public class RecommendData
+	{
+		public int id;
+		public string name;
+		public RecommendData(int id, string name)
+		{
+			this.name = name;
+			this.id = id;
+		}
+	}
+	
+	public class DeseaseListData
+	{
+		public int id;
+		public string name;
+		public string @abstract;
+		public DeseaseListData(int id, string name, string @abstract)
+		{
+			this.id = id;
+			this.name = name;
+			this.@abstract = @abstract;
 		}
 	}
 }
